@@ -31,6 +31,7 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     private ContactsCursorAdapter cursorAdapter;
     private Context context;
     private LoaderManager loaderManager;
+    boolean isValidInput = false;
 
     private class ContactsCursorAdapter extends SimpleCursorAdapter {
         ContactsCursorAdapter(Context context, int layout, Cursor c, String[] from, int[] to, int flags) {
@@ -103,6 +104,7 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
+                isValidInput = verifyInput(s.toString());
             }
         });
         acTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -114,6 +116,24 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 acTextView.setText(cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME_PRIMARY)));
             }
         });
+    }
+
+    private boolean verifyInput(String name) {
+        Cursor cursor = context.getContentResolver().query(
+                Contacts.CONTENT_URI,
+                PROJECTION,
+                Contacts.DISPLAY_NAME_PRIMARY + "=?",
+                new String[] {name},
+                null
+        );
+
+        if (cursor == null) {
+            return false;
+        }
+
+        int count = cursor.getCount();
+        cursor.close();
+        return count > 0;
     }
 
     public void load() {

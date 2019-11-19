@@ -17,6 +17,7 @@ import android.widget.Toast;
 public class SignIn extends AppCompatActivity {
     private AutoCompleteTextView acTextView;
     private Button buttonSignIn;
+    private ContactsLoader contactsLoader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +37,18 @@ public class SignIn extends AppCompatActivity {
     }
 
     public void signIn(View view) {
-        startActivity(new Intent(this, ContactsList.class));
+        if (contactsLoader != null && contactsLoader.isValidInput) {
+            startActivity(new Intent(this, ContactsList.class));
+        } else {
+            Toast.makeText(this, "Not a valid contact name.", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void activateInputs() {
         acTextView.setEnabled(true);
         buttonSignIn.setEnabled(true);
         LoaderManager loaderManager = LoaderManager.getInstance(this);
-        ContactsLoader contactsLoader = new ContactsLoader(
+        contactsLoader = new ContactsLoader(
                 this,
                 acTextView,
                 loaderManager,
