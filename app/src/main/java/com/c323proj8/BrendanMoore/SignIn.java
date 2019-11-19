@@ -24,6 +24,8 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        // I spent ages getting this AutoCompleteTextView to work even though it's not required.
+        // I just wanted this cool feature in my app. I hope you like it.
         acTextView = findViewById(R.id.autoCompleteTextView_signIn);
         buttonSignIn = findViewById(R.id.button_signIn);
 
@@ -38,7 +40,9 @@ public class SignIn extends AppCompatActivity {
 
     public void signIn(View view) {
         if (contactsLoader != null && contactsLoader.isValidInput) {
-            startActivity(new Intent(this, ContactsList.class));
+            Intent intent = new Intent(this, ContactsList.class);
+            intent.putExtra("CURRENT_USER", acTextView.getText().toString());
+            startActivity(intent);
         } else {
             Toast.makeText(this, "Not a valid contact name.", Toast.LENGTH_SHORT).show();
         }

@@ -72,7 +72,7 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     public ContactsLoader(Context context, ListView listView,
-                          LoaderManager loaderManager, int layout) {
+                          LoaderManager loaderManager, int layout, final String currentUser) {
         this.context = context;
         this.loaderManager = loaderManager;
         cursorAdapter = new ContactsCursorAdapter(
@@ -92,6 +92,7 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 String name = cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME_PRIMARY));
                 Intent intent = new Intent(context, Conversation.class);
                 intent.putExtra("NAME", name);
+                intent.putExtra("CURRENT_USER", currentUser);
                 context.startActivity(intent);
             }
         });
