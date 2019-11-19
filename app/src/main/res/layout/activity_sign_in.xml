@@ -17,13 +17,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-            android:id="@+id/editText_signIn"
-            style="@style/Widget.AppCompat.AutoCompleteTextView"
+        <AutoCompleteTextView
+            android:id="@+id/autoCompleteTextView_signIn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/colorPrimaryDark"
+            android:completionThreshold="1"
             android:ems="10"
+            android:enabled="false"
             android:hint="Name"
             android:inputType="textPersonName"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -40,14 +41,15 @@
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:enabled="false"
             android:onClick="signIn"
             android:text="Sign in"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/editText_signIn"
-            app:layout_constraintStart_toStartOf="@+id/editText_signIn"
-            app:layout_constraintTop_toBottomOf="@+id/editText_signIn" />
+            app:layout_constraintEnd_toEndOf="@+id/autoCompleteTextView_signIn"
+            app:layout_constraintStart_toStartOf="@+id/autoCompleteTextView_signIn"
+            app:layout_constraintTop_toBottomOf="@+id/autoCompleteTextView_signIn" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
