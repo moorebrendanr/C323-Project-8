@@ -1,6 +1,7 @@
 package com.c323proj8.BrendanMoore;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract.Contacts;
@@ -13,6 +14,7 @@ import android.widget.CursorAdapter;
 import android.widget.Filter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,13 +82,25 @@ public class ContactsLoader implements LoaderManager.LoaderCallbacks<Cursor> {
                 FROM_COLUMNS, TO_IDS,
                 0);
         listView.setAdapter(cursorAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Context context = ContactsLoader.this.context;
+                CursorAdapter adapter = (CursorAdapter) parent.getAdapter();
+                Cursor cursor = adapter.getCursor();
+                cursor.moveToPosition(position);
+                String name = cursor.getString(cursor.getColumnIndex(Contacts.DISPLAY_NAME_PRIMARY));
+                Intent intent = new Intent(context, Conversation.class);
+                intent.putExtra("NAME", name);
+                context.startActivity(intent);
+            }
+        });
     }
 
     public ContactsLoader(Context context, final AutoCompleteTextView acTextView,
                           LoaderManager loaderManager, int layout) {
         this.context = context;
         this.loaderManager = loaderManager;
-//        this.selection = selection;
         cursorAdapter = new ContactsCursorAdapter(
                 context,
                 layout,
