@@ -15,6 +15,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+/**
+ * This activity shows a conversation between two people.
+ */
 public class Conversation extends AppCompatActivity {
     private MessagesDatabase db;
     private String contactName;
@@ -22,6 +25,10 @@ public class Conversation extends AppCompatActivity {
     private List<Message> messages;
     private ConversationArrayAdapter adapter;
 
+    /**
+     * Create the activity
+     * @param savedInstanceState the saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +46,10 @@ public class Conversation extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Callback function for the send button. Add message to database and display it
+     * @param view the button
+     */
     public void sendMessage(View view) {
         EditText editText = findViewById(R.id.editText_conversation);
         String messageText = editText.getText().toString();
@@ -50,14 +61,28 @@ public class Conversation extends AppCompatActivity {
         }
     }
 
+    /**
+     * An extended ArrayAdapter.
+     */
     private class ConversationArrayAdapter extends ArrayAdapter<Message> {
         private List<Message> messages;
 
+        /**
+         * Construct a ConversationArrayAdapter
+         * @param messages a list of Messages
+         */
         public ConversationArrayAdapter(@NonNull List<Message> messages) {
             super(Conversation.this, R.layout.sent_message, messages);
             this.messages = messages;
         }
 
+        /**
+         * Get the view for a list item
+         * @param position the position of the item
+         * @param convertView the cached view
+         * @param parent the parent
+         * @return the View
+         */
         @NonNull
         @Override
         public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {

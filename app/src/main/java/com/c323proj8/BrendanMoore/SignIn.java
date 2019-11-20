@@ -14,11 +14,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * This activity is the Sign in page for the app. Must sign in as a contact saved in the phone.
+ */
 public class SignIn extends AppCompatActivity {
     private AutoCompleteTextView acTextView;
     private Button buttonSignIn;
     private ContactsLoader contactsLoader;
 
+    /**
+     * Create the activity
+     * @param savedInstanceState The saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +47,18 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    /**
+     * Start the background service
+     */
     private void startDBQueryService() {
         Intent intent = new Intent(this, DBQueryService.class);
         startService(intent);
     }
 
+    /**
+     * Callback function for sign in button
+     * @param view the button
+     */
     public void signIn(View view) {
         if (contactsLoader != null && contactsLoader.isValidInput) {
             Intent intent = new Intent(this, ContactsList.class);
@@ -55,6 +69,9 @@ public class SignIn extends AppCompatActivity {
         }
     }
 
+    /**
+     * Enable the AutoCompleteTextView and Button once permissions are granted.
+     */
     private void activateInputs() {
         acTextView.setEnabled(true);
         buttonSignIn.setEnabled(true);
@@ -68,6 +85,12 @@ public class SignIn extends AppCompatActivity {
         contactsLoader.load();
     }
 
+    /**
+     * Handle request permissions results.
+     * @param requestCode request code
+     * @param permissions permissions
+     * @param grantResults grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == 1) {

@@ -11,6 +11,9 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class manages the Messages database.
+ */
 public class MessagesDatabase extends SQLiteOpenHelper {
     private static final String DB_NAME = "messages.db";
     private static final String TABLE_NAME = "Message";
@@ -23,22 +26,40 @@ public class MessagesDatabase extends SQLiteOpenHelper {
     private static final String COLUMN_MESSAGE = "MessageText";
     private static final int COLUMN_MESSAGE_INDEX = 3;
 
+    /**
+     * Construct a MessagesDatabase
+     * @param context the context
+     */
     public MessagesDatabase(@Nullable Context context) {
         super(context, DB_NAME, null, 1);
     }
 
+    /**
+     * Create the database
+     * @param db the database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE "+TABLE_NAME+" ("+COLUMN_ID+" INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 COLUMN_FROM+" TEXT, "+COLUMN_TO+" TEXT, "+COLUMN_MESSAGE+" TEXT)");
     }
 
+    /**
+     * Upgrade the database
+     * @param db the database
+     * @param oldVersion the old version number
+     * @param newVersion the new version number
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         onCreate(db);
     }
 
+    /**
+     * Get the total number of items in the database
+     * @return the count
+     */
     public int getCount() {
         SQLiteDatabase db = getWritableDatabase();
         Cursor allData = db.rawQuery("SELECT * FROM "+TABLE_NAME, null);
@@ -47,7 +68,7 @@ public class MessagesDatabase extends SQLiteOpenHelper {
         return count;
     }
 
-    /***
+    /**
      * Insert a new row into the table.
      * @param fromWho from who?
      * @param toWho to who?
@@ -64,6 +85,12 @@ public class MessagesDatabase extends SQLiteOpenHelper {
         return result != -1;
     }
 
+    /**
+     * Get all the messages between two users.
+     * @param currentUser the currently signed in user
+     * @param contactName the other user in the conversation
+     * @return a List of Messages
+     */
     public List<Message> getMessages(String currentUser, String contactName) {
         SQLiteDatabase db = getWritableDatabase();
         Cursor sentMessages = db.rawQuery(
@@ -74,8 +101,10 @@ public class MessagesDatabase extends SQLiteOpenHelper {
                 new String[] {contactName, currentUser}
         );
         List<Message> messages = new ArrayList<>();
+        // Iterate through sent and received messages, adding them to the List in the correct order.
         if (sentMessages.getCount() > 0 && receivedMessages.getCount() > 0) {
             sentMessages.moveToFirst(); receivedMessages.moveToFirst();
+            // Iterate until one cursor reaches the end
             while (!(sentMessages.isAfterLast() || receivedMessages.isAfterLast())) {
                 int sentID = sentMessages.getInt(COLUMN_ID_INDEX);
                 int receivedID = receivedMessages.getInt(COLUMN_ID_INDEX);
@@ -104,6 +133,7 @@ public class MessagesDatabase extends SQLiteOpenHelper {
                 remainder = receivedMessages;
             }
 
+            // Iterate through the remainder of the messages
             if (remainder != null) {
                 do {
                     Message message = new Message(
@@ -115,6 +145,7 @@ public class MessagesDatabase extends SQLiteOpenHelper {
                 } while (remainder.moveToNext());
                 remainder.close();
             }
+        // Iterate through sent messages if there are no received messages
         } else if (sentMessages.getCount() > 0) {
             while (sentMessages.moveToNext()) {
                 Message message = new Message(
@@ -124,6 +155,7 @@ public class MessagesDatabase extends SQLiteOpenHelper {
                 );
                 messages.add(message);
             }
+        // Iterate through received messages if there are no sent messages
         } else if (receivedMessages.getCount() > 0) {
             while (receivedMessages.moveToNext()) {
                 Message message = new Message(

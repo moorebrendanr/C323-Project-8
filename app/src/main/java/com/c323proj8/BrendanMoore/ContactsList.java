@@ -7,8 +7,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
+/**
+ * This activity shows a list of all contacts.
+ */
 public class ContactsList extends AppCompatActivity {
 
+    /**
+     * Create the activity.
+     * @param savedInstanceState the saved instance
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
