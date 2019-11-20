@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class MessagesDatabase extends SQLiteOpenHelper {
@@ -38,6 +37,14 @@ public class MessagesDatabase extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+TABLE_NAME);
         onCreate(db);
+    }
+
+    public int getCount() {
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor allData = db.rawQuery("SELECT * FROM "+TABLE_NAME, null);
+        int count = allData.getCount();
+        allData.close();
+        return count;
     }
 
     /***

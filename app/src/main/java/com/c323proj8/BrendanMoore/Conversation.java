@@ -42,10 +42,12 @@ public class Conversation extends AppCompatActivity {
     public void sendMessage(View view) {
         EditText editText = findViewById(R.id.editText_conversation);
         String messageText = editText.getText().toString();
-        editText.setText(null);
-        db.insert(currentUser, contactName, messageText);
-        messages.add(new Message(messageText, currentUser, contactName));
-        adapter.notifyDataSetChanged();
+        if (!messageText.equals("")) {
+            editText.setText(null);
+            db.insert(currentUser, contactName, messageText);
+            messages.add(new Message(messageText, currentUser, contactName));
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private class ConversationArrayAdapter extends ArrayAdapter<Message> {

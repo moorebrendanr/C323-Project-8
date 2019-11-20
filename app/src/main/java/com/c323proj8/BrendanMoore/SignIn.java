@@ -24,6 +24,8 @@ public class SignIn extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
+        startDBQueryService();
+
         // I spent ages getting this AutoCompleteTextView to work even though it's not required.
         // I just wanted this cool feature in my app. I hope you like it.
         acTextView = findViewById(R.id.autoCompleteTextView_signIn);
@@ -36,6 +38,11 @@ public class SignIn extends AppCompatActivity {
                 activateInputs();
             }
         }
+    }
+
+    private void startDBQueryService() {
+        Intent intent = new Intent(this, DBQueryService.class);
+        startService(intent);
     }
 
     public void signIn(View view) {
